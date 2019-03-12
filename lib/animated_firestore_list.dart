@@ -148,6 +148,7 @@ class FirestoreAnimatedListState extends State<FirestoreAnimatedList> {
   FirestoreList _model;
   String _error;
   bool _loaded = false;
+  int _itemsCount = 0;
 
   @override
   void didChangeDependencies() {
@@ -186,11 +187,15 @@ class FirestoreAnimatedListState extends State<FirestoreAnimatedList> {
     try {
       if (mounted) {
         setState(() {
-          _animatedListKey.currentState
-              ?.insertItem(index, duration: widget.duration);
+          _animatedListKey.currentState?.insertItem(
+            index,
+            duration:
+                _model.length <= _itemsCount ? Duration.zero : widget.duration,
+          );
         });
       }
     } catch (error) {
+      print('error: $error');
       _model.log("Failed to run onDocumentAdded");
     }
   }
@@ -218,15 +223,43 @@ class FirestoreAnimatedListState extends State<FirestoreAnimatedList> {
   // No animation, just update contents
   void _onDocumentChanged(int index, DocumentSnapshot snapshot) {
     if (mounted) {
-      setState(() {});
+      // setState(() {});
     }
   }
+
+  int _initial = 0;
 
   void _onLoaded(QuerySnapshot querySnapshot) {
     if (mounted && !_loaded) {
       setState(() {
         _loaded = true;
+        _initial = querySnapshot.documents.length;
+        _itemsCount = querySnapshot.documents.length;
       });
+    }
+
+    if (_model.length == _initial) {
+      if (widget.controller.position.maxScrollExtent == 0) {
+        widget.controller
+            .animateTo(1.0,
+                duration: Duration(milliseconds: 1), curve: Curves.linear)
+            .then((ignored) {
+          widget.controller.jumpTo(widget.controller.position.maxScrollExtent);
+        });
+      }
+    }
+
+    if (querySnapshot == null) {
+      return;
+    }
+
+    if (_model.length > _itemsCount) {
+      _itemsCount = _model.length;
+      widget.controller.animateTo(
+        widget.controller.position.maxScrollExtent,
+        duration: widget.duration,
+        curve: Curves.linear,
+      );
     }
   }
 
