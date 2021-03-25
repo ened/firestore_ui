@@ -1,3 +1,5 @@
+// @dart=2.9
+
 library firestore_ui;
 
 export 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';

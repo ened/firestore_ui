@@ -1,3 +1,5 @@
+// @dart=2.9
+
 // Copyright 2017, the Chromium project authors.  Please see the AUTHORS file
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
@@ -14,7 +16,8 @@ final String title = 'firestore_ui example';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MaterialApp(title: title, home: MyHomePage(firestore: FirebaseFirestore.instance)));
+  runApp(MaterialApp(
+      title: title, home: MyHomePage(firestore: FirebaseFirestore.instance)));
 }
 
 class MessageListTile extends StatelessWidget {

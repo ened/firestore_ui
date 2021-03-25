@@ -1,3 +1,5 @@
+// @dart=2.9
+
 // Copyright 2017, the Flutter project authors.  Please see the AUTHORS file
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
@@ -200,14 +202,14 @@ class FirestoreAnimatedListState extends State<FirestoreAnimatedList> {
     super.dispose();
   }
 
-   void _onError(Exception exception) {
+  void _onError(Exception exception) {
     if (mounted) {
       setState(() {
         _error = exception;
       });
     }
   }
-  
+
   void _onDocumentAdded(int index, DocumentSnapshot snapshot) {
     // if (!_loaded) {
     //   return; // AnimatedList is not created yet
@@ -271,8 +273,11 @@ class FirestoreAnimatedListState extends State<FirestoreAnimatedList> {
 
   @override
   Widget build(BuildContext context) {
-     if (_model.isEmpty) {
-      return _loaded ? (widget.emptyChild ?? Container()) : (widget.defaultChild ?? const Center(child: CircularProgressIndicator()));
+    if (_model.isEmpty) {
+      return _loaded
+          ? (widget.emptyChild ?? Container())
+          : (widget.defaultChild ??
+              const Center(child: CircularProgressIndicator()));
     }
 
     if (_error != null) {

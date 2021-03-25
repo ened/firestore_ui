@@ -1,3 +1,5 @@
+// @dart=2.9
+
 // Copyright 2017, the Flutter project authors.  Please see the AUTHORS file
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
@@ -31,7 +33,8 @@ class FirestoreList extends ListBase<DocumentSnapshot>
     this.debug = false,
   }) {
     assert(query != null);
-    listen(query.snapshots(), _onData, onError: (Object error) => _onError(error));
+    listen(query.snapshots(), _onData,
+        onError: (Object error) => _onError(error));
   }
 
   /// Firestore query used to populate the list
